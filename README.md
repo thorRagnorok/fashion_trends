@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# THE DROP — Men's Fashion Trending (Affiliate)
 
-## Getting Started
+Premium men's fashion discovery site with a single **Trending** feed (newest products first), product detail pages, Supabase-backed admin, affiliate click tracking, and basic analytics.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Next.js 16 (App Router) + TypeScript + Tailwind CSS
+- Supabase (Postgres, Auth, Storage)
+- Vercel (hosting)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Quick start
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Install**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+2. **Supabase**
 
-To learn more about Next.js, take a look at the following resources:
+   - Create a project at [supabase.com](https://supabase.com).
+   - Run `supabase/migrations/001_initial.sql` in the SQL editor.
+   - Create an admin user under **Authentication → Users**.
+   - Confirm email auth is enabled for email/password sign-in.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Environment**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   cp .env.example .env.local
+   ```
 
-## Deploy on Vercel
+   Fill in URL, anon key, and service role key from **Project Settings → API**.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Run**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm run dev
+   ```
+
+   - Public site: [http://localhost:3000](http://localhost:3000)
+   - Admin: [http://localhost:3000/admin/login](http://localhost:3000/admin/login)
+
+## Architecture
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for folder layout, data flow, and security model.
+
+## Deploy (Vercel)
+
+1. Import the repo and add the same env vars as `.env.local`.
+2. In Supabase **Authentication → URL configuration**, add your production site URL and `https://your-domain.com/auth/callback`.
+
+## Affiliate clicks
+
+`GET /api/go/[productId]` records a row in `product_clicks`, then redirects to the product's `affiliate_url` (query parameters preserved).
